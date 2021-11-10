@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ASP_RazorContoso.Data;
 using ASP_RazorContoso.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ASP_RazorContoso.Pages.Students
 {
     public class IndexModel : PageModel
     {
         private readonly ASP_RazorContoso.Data.ApplicationDbContext _context;
+        private readonly IConfiguration Configuration;
 
-        public IndexModel(ASP_RazorContoso.Data.ApplicationDbContext context)
+        public IndexModel(ASP_RazorContoso.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public string NameSort { get; set; }
@@ -24,12 +27,21 @@ namespace ASP_RazorContoso.Pages.Students
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
 
-        public IList<Student> Students { get;set; }
+        public PaginatedList<Student> Students { get;set; }
 
-        public async Task OnGetAsync(string sortOrder, string searchString)
+        public async Task OnGetAsync(string sortOrder, string searchString, string currentFilter, int? pageIndex)
         {
+            CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
             CurrentFilter = searchString;
 
@@ -59,7 +71,9 @@ namespace ASP_RazorContoso.Pages.Students
             }
 
 
-            Students = await studentsIQ.AsNoTracking().ToListAsync();
+            var pageSize = Configuration.GetValue("PageSize", 4);
+            Students = await PaginatedList<Student>.CreateAsync(
+                studentsIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }
