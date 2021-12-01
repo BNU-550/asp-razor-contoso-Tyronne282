@@ -18,14 +18,14 @@ namespace ASP_RazorContoso.Data
 
             var students = new Student[]
             {
-                new Student{FirstName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
-                new Student{FirstName="Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Student{FirstName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2016-09-01")},
-                new Student{FirstName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Student{FirstName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
+                new Student{FirstName="Xavier",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
+                new Student{FirstName="Harry",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Student{FirstName="Micheal",LastName="Anand",EnrollmentDate=DateTime.Parse("2018-09-01")},
+                new Student{FirstName="Roche",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Student{FirstName="Josh",LastName="Li",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Student{FirstName="Dan",LastName="Justice",EnrollmentDate=DateTime.Parse("2016-09-01")},
+                new Student{FirstName="Tyronne",LastName="Norman",EnrollmentDate=DateTime.Parse("2018-09-01")},
+                new Student{FirstName="Vinny",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
             };
 
             context.Students.AddRange(students);
