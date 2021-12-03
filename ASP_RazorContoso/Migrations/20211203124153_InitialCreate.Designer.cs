@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP_RazorContoso.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211203123302_Initalcreate")]
-    partial class Initalcreate
+    [Migration("20211203124153_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
