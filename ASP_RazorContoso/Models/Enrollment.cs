@@ -15,7 +15,7 @@ namespace ASP_RazorContoso.Models
     {
         public int EnrollmentID { get; set; }
 
-        public int CourseID { get; set; }
+        public String CourseID { get; set; }
 
         public int StudentID { get; set; }
 

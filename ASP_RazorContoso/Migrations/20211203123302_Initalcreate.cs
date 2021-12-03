@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASP_RazorContoso.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class Initalcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,14 +50,26 @@ namespace ASP_RazorContoso.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseID = table.Column<int>(type: "int", nullable: false),
-                    CorseCose = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Credits = table.Column<int>(type: "int", nullable: false)
+                    CourseID = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.CourseID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Modules",
+                columns: table => new
+                {
+                    ModuleID = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Credit = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modules", x => x.ModuleID);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,8 +78,8 @@ namespace ASP_RazorContoso.Migrations
                 {
                     StudentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -182,12 +194,36 @@ namespace ASP_RazorContoso.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseModule",
+                columns: table => new
+                {
+                    CoursesCourseID = table.Column<string>(type: "nvarchar(8)", nullable: false),
+                    ModulesModuleID = table.Column<string>(type: "nvarchar(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseModule", x => new { x.CoursesCourseID, x.ModulesModuleID });
+                    table.ForeignKey(
+                        name: "FK_CourseModule_Courses_CoursesCourseID",
+                        column: x => x.CoursesCourseID,
+                        principalTable: "Courses",
+                        principalColumn: "CourseID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseModule_Modules_ModulesModuleID",
+                        column: x => x.ModulesModuleID,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollments",
                 columns: table => new
                 {
                     EnrollmentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CourseID = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<string>(type: "nvarchar(8)", nullable: true),
                     StudentID = table.Column<int>(type: "int", nullable: false),
                     Grade = table.Column<int>(type: "int", nullable: true)
                 },
@@ -199,7 +235,7 @@ namespace ASP_RazorContoso.Migrations
                         column: x => x.CourseID,
                         principalTable: "Courses",
                         principalColumn: "CourseID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Enrollments_Students_StudentID",
                         column: x => x.StudentID,
@@ -248,6 +284,11 @@ namespace ASP_RazorContoso.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseModule_ModulesModuleID",
+                table: "CourseModule",
+                column: "ModulesModuleID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_CourseID",
                 table: "Enrollments",
                 column: "CourseID");
@@ -276,6 +317,9 @@ namespace ASP_RazorContoso.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CourseModule");
+
+            migrationBuilder.DropTable(
                 name: "Enrollments");
 
             migrationBuilder.DropTable(
@@ -283,6 +327,9 @@ namespace ASP_RazorContoso.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Modules");
 
             migrationBuilder.DropTable(
                 name: "Courses");
