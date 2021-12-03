@@ -16,7 +16,7 @@ namespace ASP_RazorContoso.Pages.Students
         private readonly ASP_RazorContoso.Data.ApplicationDbContext _context;
         private readonly IConfiguration Configuration;
 
-        public IndexModel(ASP_RazorContoso.Data.ApplicationDbContext context, IConfiguration configuration)
+        public IndexModel(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
@@ -26,14 +26,14 @@ namespace ASP_RazorContoso.Pages.Students
         public string DateSort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
+        public PaginatedList<Student> Students { get; set; }
 
-        public PaginatedList<Student> Students { get;set; }
-
-        public async Task OnGetAsync(string sortOrder, string searchString, string currentFilter, int? pageIndex)
+        public async Task OnGetAsync(string sortOrder, string searchString, 
+            string currentFilter, int? pageIndex)
         {
-            CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+
             if (searchString != null)
             {
                 pageIndex = 1;
@@ -43,7 +43,7 @@ namespace ASP_RazorContoso.Pages.Students
                 searchString = currentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = searchString; 
 
             IQueryable<Student> studentsIQ = from s in _context.Students
                                              select s;
@@ -70,8 +70,8 @@ namespace ASP_RazorContoso.Pages.Students
                     break;
             }
 
-
             var pageSize = Configuration.GetValue("PageSize", 4);
+
             Students = await PaginatedList<Student>.CreateAsync(
                 studentsIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
